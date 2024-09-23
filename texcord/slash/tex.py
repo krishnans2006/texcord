@@ -9,17 +9,6 @@ import sympy
 import matplotlib.pyplot as plt
 
 
-def render_latex(formula: str) -> io.BytesIO:
-    fig = plt.figure(figsize=(0.01, 0.01))
-    fig.text(0, 0, "${}$".format(formula), fontsize=12)
-
-    buffer = io.BytesIO()
-    fig.savefig(buffer, dpi=300, transparent=True, format="png", bbox_inches="tight", pad_inches=0)
-    plt.close(fig)
-    buffer.seek(0)
-    return buffer
-
-
 class Tex(commands.Cog):
     def __init__(self, client: commands.Bot):
         self.client = client
@@ -35,8 +24,12 @@ class Tex(commands.Cog):
     async def tex(self, context: ApplicationContext, tex: Option(str, "Valid LaTeX code")) -> None:
         await context.defer(ephemeral=True)
 
-        image = render_latex(tex)
-        discord_file = discord.File(fp=image, filename="latex.png")
+        with io.BytesIO() as image:
+            sympy.preview(
+                rf"${tex}$", viewer="BytesIO", outputbuffer=image, dvioptions=["-D", "500"]
+            )
+            image.seek(0)
+            discord_file = discord.File(fp=image, filename="latex.png")
 
         await context.respond(
             content="",
