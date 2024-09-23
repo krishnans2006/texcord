@@ -28,7 +28,7 @@ class Tex(commands.Cog):
                     rf"${tex}$",
                     viewer="BytesIO",
                     outputbuffer=image,
-                    dvioptions=["-D", "400", "-bg", "Transparent", "-fg", "rgb 0.5 0.5 0.5"],
+                    dvioptions=["-D", "400", "-bg", "Transparent", "-fg", "rgb 0.596 0.6 0.612"],
                 )
             except RuntimeError as e:
                 error_string = str(e)
