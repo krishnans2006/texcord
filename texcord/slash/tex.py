@@ -1,12 +1,10 @@
 import io
 
 import discord
-from discord import ApplicationContext, SlashCommand, SlashCommandGroup, Option
+from discord import ApplicationContext, Option
 from discord.ext import commands
 from discord.commands import slash_command
 import sympy
-
-import matplotlib.pyplot as plt
 
 
 class Tex(commands.Cog):
@@ -22,12 +20,15 @@ class Tex(commands.Cog):
         },
     )
     async def tex(self, context: ApplicationContext, tex: Option(str, "Valid LaTeX code")) -> None:
-        await context.defer(ephemeral=True)
+        await context.defer()
 
         with io.BytesIO() as image:
             try:
                 sympy.preview(
-                    rf"${tex}$", viewer="BytesIO", outputbuffer=image, dvioptions=["-D", "500"]
+                    rf"${tex}$",
+                    viewer="BytesIO",
+                    outputbuffer=image,
+                    dvioptions=["-D", "400", "-bg", "Transparent", "-fg", "rgb 0.5 0.5 0.5"],
                 )
             except RuntimeError as e:
                 error_string = str(e)
@@ -40,7 +41,6 @@ class Tex(commands.Cog):
                     discord_file = discord.File(fp=error_file, filename="error.txt")
                     await context.respond(
                         content=f"An error occurred while rendering the LaTeX code!",
-                        ephemeral=True,
                         file=discord_file,
                     )
                     return
@@ -49,7 +49,6 @@ class Tex(commands.Cog):
 
         await context.respond(
             content="",
-            ephemeral=True,
             file=discord_file,
         )
 
