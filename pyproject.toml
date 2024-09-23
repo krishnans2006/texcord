@@ -9,9 +9,15 @@ readme = "README.md"
 python = "^3.11"
 py-cord = "^2.6.1"
 requests = "^2.32.3"
+sympy = "^1.13.3"
+matplotlib = "^3.9.2"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.8.0"
+
+[tool.black]
+line-length = 100
+target-version = ['py311']
 
 [build-system]
 requires = ["poetry-core"]
