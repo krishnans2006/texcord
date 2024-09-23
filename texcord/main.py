@@ -11,7 +11,7 @@ else:
 
 
 # slash_cogs = ("slash.help", "slash.tex", "slash.settings")
-slash_cogs = ("slash.help",)
+slash_cogs = ("slash.help", "slash.tex")
 for cog in slash_cogs:
     client.load_extension(cog)
 
